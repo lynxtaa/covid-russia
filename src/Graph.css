@@ -1,0 +1,18 @@
+.Graph {
+	display: flex;
+  flex-direction: column;
+  height: 90%;
+}
+
+.Graph .footer {
+  margin-top: auto;
+}
+
+.Graph .question {
+  margin-top: 0;
+  font-weight: normal;
+}
+
+.Graph .answer {
+  font-size: 3rem;
+}

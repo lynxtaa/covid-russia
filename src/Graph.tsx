@@ -1,53 +1,104 @@
-import React from 'react'
-import * as Highcharts from 'highcharts'
-import HighchartsData from 'highcharts/modules/data'
-import HighchartsExporting from 'highcharts/modules/exporting'
-import DarkUnicaTheme from 'highcharts/themes/dark-unica'
-import HighchartsReact from 'highcharts-react-official'
+import React, { useState, useEffect, useMemo } from 'react'
+import { parse as parseCsv } from 'papaparse'
+import { parse as parseDate, format as formatDate } from 'date-fns'
+import { ru } from 'date-fns/locale'
 
-HighchartsExporting(Highcharts)
-HighchartsData(Highcharts)
-// DarkUnicaTheme(Highcharts)
+import Link from './components/Link'
+
+import './Graph.css'
 
 const SERIES_URL =
 	'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv'
 
-const options: Highcharts.Options = {
-	chart: {
-		type: 'spline',
-	},
-	title: {
-		text: 'Covid-19 Russia',
-	},
-	subtitle: {
-		text: 'Просто график',
-	},
-	yAxis: {
-		type: 'logarithmic',
-		minorTickInterval: 1,
-	},
-	data: {
-		csvURL: SERIES_URL,
-		beforeParse(csv) {
-			const rows = csv.split('\n')
-			const marchStartsAtColumn = 43
-			const russiaRow = rows.find((row) => /Russia/.test(row))!
+type DateCases = (readonly [Date, number])[]
 
-			const dates = rows[0].split(',').slice(marchStartsAtColumn)
+function formatData(data: string[][]): DateCases {
+	const COUNTRY_NAME_INDEX = 1
+	const DATES_START_AT_INDEX = 4
 
-			const newCsv = [
-				'Дата,Количество случаев',
-				...russiaRow
-					.split(',')
-					.slice(marchStartsAtColumn)
-					.map((cases, i) => `${dates[i]},${cases}`),
-			].join('\n')
+	const dates = data[0]
+	const russiaData = data.find((row) => /Russia/.test(row[COUNTRY_NAME_INDEX]))
 
-			return newCsv
-		},
-	},
+	if (!russiaData) {
+		throw new Error('Error founding data for Russia')
+	}
+
+	return dates
+		.slice(DATES_START_AT_INDEX)
+		.map(
+			(date, index) =>
+				[
+					parseDate(date, 'M/d/yy', new Date()),
+					Number(russiaData[index + DATES_START_AT_INDEX]),
+				] as const,
+		)
 }
 
 export default function Graph() {
-	return <HighchartsReact highcharts={Highcharts} options={options} />
+	const [dateCases, setDateCases] = useState<DateCases | null>(null)
+	const [error, setError] = useState('')
+
+	useEffect(() => {
+		fetch(SERIES_URL)
+			.then((response) => {
+				if (!response.ok) {
+					throw new Error(`Error loading stats: ${response.status}`)
+				}
+				return response.text()
+			})
+			.then((csv) => {
+				const { data, errors } = parseCsv(csv)
+				if (errors.length > 0) {
+					throw errors[0]
+				}
+				setDateCases(formatData(data))
+			})
+			.catch((err: Error) => setError(err.message))
+	}, [])
+
+	const info = useMemo(() => {
+		if (!dateCases) {
+			return null
+		}
+
+		const DAYS_IN_WEEK = 7
+
+		const lastIndex = dateCases.length - 1
+
+		const [lastDate, lastConfirmed] = dateCases[lastIndex]
+		const [, dayBeforeConfirmed] = dateCases[lastIndex - 1]
+		const [, weekAgoConfirmed] = dateCases[lastIndex - DAYS_IN_WEEK]
+		const [, weekAndOneDayAgoConfirmed] = dateCases[lastIndex - 1 - DAYS_IN_WEEK]
+
+		const delta1 = lastConfirmed - weekAgoConfirmed
+		const delta2 = dayBeforeConfirmed - weekAndOneDayAgoConfirmed
+
+		return {
+			isExponential: delta1 > delta2,
+			updatedAt: formatDate(lastDate, 'd MMMM yyyy', { locale: ru }),
+		}
+	}, [dateCases])
+
+	return (
+		<div className="Graph">
+			{error ? (
+				<p className="error">{error}</p>
+			) : info ? (
+				<>
+					<h1 className="question">
+						Рост случаев COVID19&nbsp;в России экспоненциальный?
+					</h1>
+					<h2 className="answer">
+						{info.isExponential ? 'Да' : 'Нет'}
+						<Link href="https://aatishb.com/covidtrends/" isExternal>
+							.
+						</Link>
+					</h2>
+					<div className="footer">Обновлено: {info.updatedAt}</div>
+				</>
+			) : (
+				'Загрузка...'
+			)}
+		</div>
+	)
 }
