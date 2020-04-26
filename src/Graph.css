@@ -1,18 +1,41 @@
 .Graph {
 	display: flex;
-  flex-direction: column;
-  height: 90%;
+	flex-direction: column;
+	height: 90%;
 }
 
 .Graph .footer {
-  margin-top: auto;
+	margin-top: auto;
 }
 
 .Graph .question {
-  margin-top: 0;
-  font-weight: normal;
+	margin-top: 0;
+	font-weight: normal;
 }
 
 .Graph .answer {
-  font-size: 3rem;
+	font-size: 3rem;
+}
+
+@keyframes spinZ {
+	from {
+		transform: rotateZ(0deg);
+	}
+	to {
+		transform: rotateZ(360deg);
+	}
+}
+
+.Graph .loading {
+	animation: 10s linear spinZ;
+	animation-iteration-count: infinite;
+	align-self: center;
+	justify-self: center;
+	margin: auto;
+	font-size: 7rem;
+}
+
+.Graph .error {
+	font-size: 2rem;
+	color: #ff8282;
 }

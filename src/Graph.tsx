@@ -82,7 +82,9 @@ export default function Graph() {
 	return (
 		<div className="Graph">
 			{error ? (
-				<p className="error">{error}</p>
+				<p className="error">
+					Ой, что-то случилось :( <details>{error}</details>{' '}
+				</p>
 			) : info ? (
 				<>
 					<h1 className="question">
@@ -97,7 +99,11 @@ export default function Graph() {
 					<div className="footer">Обновлено: {info.updatedAt}</div>
 				</>
 			) : (
-				'Загрузка...'
+				<div className="loading">
+					<span role="img" aria-label="virus">
+						🦠
+					</span>
+				</div>
 			)}
 		</div>
 	)
