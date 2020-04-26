@@ -96,7 +96,7 @@ export default function Graph() {
 							.
 						</Link>
 					</h2>
-					<div className="footer">Обновлено: {info.updatedAt}</div>
+					<div className="footer">Обновлено {info.updatedAt}</div>
 				</>
 			) : (
 				<div className="loading">

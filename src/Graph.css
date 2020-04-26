@@ -1,7 +1,7 @@
 .Graph {
 	display: flex;
 	flex-direction: column;
-	height: 90%;
+	height: 100%;
 }
 
 .Graph .footer {
@@ -14,7 +14,7 @@
 }
 
 .Graph .answer {
-	font-size: 3rem;
+	font-size: 4rem;
 }
 
 @keyframes spinZ {
