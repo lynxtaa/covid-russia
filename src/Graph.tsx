@@ -82,9 +82,9 @@ export default function Graph() {
 	return (
 		<div className="Graph">
 			{error ? (
-				<p className="error">
+				<div className="error">
 					Ой, что-то случилось :( <details>{error}</details>{' '}
-				</p>
+				</div>
 			) : info ? (
 				<>
 					<h1 className="question">
