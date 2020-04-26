@@ -1,5 +1,5 @@
 {
-  "name": "covid-graph",
+  "name": "covid-russia",
   "version": "0.1.0",
   "private": true,
   "author": "Alex Kondratyuk <lynxtaa@gmail.com>",
@@ -18,8 +18,6 @@
     "classnames": "^2.2.6",
     "date-fns": "^2.12.0",
     "gh-pages": "^2.2.0",
-    "highcharts": "^8.0.4",
-    "highcharts-react-official": "^3.0.0",
     "normalize.css": "^8.0.1",
     "papaparse": "^5.2.0",
     "react": "^16.13.1",
