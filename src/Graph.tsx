@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react'
 import { parse as parseCsv } from 'papaparse'
-import { parse as parseDate, format as formatDate } from 'date-fns'
+import { parse as parseDate, format as formatDate, isValid } from 'date-fns'
 import { ru } from 'date-fns/locale'
 
 import Link from './components/Link'
@@ -10,32 +10,31 @@ import './Graph.css'
 const SERIES_URL =
 	'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv'
 
-type DateCases = (readonly [Date, number])[]
+type DateCase = { date: Date; numCases: number }
 
-function formatData(data: string[][]): DateCases {
+function formatData(data: string[][]): DateCase[] {
 	const COUNTRY_NAME_INDEX = 1
-	const DATES_START_AT_INDEX = 4
 
-	const dates = data[0]
+	const datesStartAtIndex = data[0].findIndex((maybeDate) =>
+		isValid(parseDate(maybeDate, 'M/d/yy', new Date())),
+	)
+
+	const dates = data[0].slice(datesStartAtIndex)
+
 	const russiaData = data.find((row) => /Russia/.test(row[COUNTRY_NAME_INDEX]))
 
 	if (!russiaData) {
 		throw new Error('Error founding data for Russia')
 	}
 
-	return dates
-		.slice(DATES_START_AT_INDEX)
-		.map(
-			(date, index) =>
-				[
-					parseDate(date, 'M/d/yy', new Date()),
-					Number(russiaData[index + DATES_START_AT_INDEX]),
-				] as const,
-		)
+	return dates.map((date, index) => ({
+		date: parseDate(date, 'M/d/yy', new Date()),
+		numCases: Number(russiaData[index + datesStartAtIndex]),
+	}))
 }
 
 export default function Graph() {
-	const [dateCases, setDateCases] = useState<DateCases | null>(null)
+	const [dateCases, setDateCases] = useState<DateCase[] | null>(null)
 	const [error, setError] = useState('')
 
 	useEffect(() => {
@@ -49,7 +48,7 @@ export default function Graph() {
 			.then((csv) => {
 				const { data, errors } = parseCsv(csv)
 				if (errors.length > 0) {
-					throw errors[0]
+					throw new Error(errors[0].message)
 				}
 				setDateCases(formatData(data))
 			})
@@ -61,17 +60,16 @@ export default function Graph() {
 			return null
 		}
 
-		const DAYS_IN_WEEK = 7
+		const DAYS_RANGE = 7
 
 		const lastIndex = dateCases.length - 1
 
-		const [lastDate, lastConfirmed] = dateCases[lastIndex]
-		const [, dayBeforeConfirmed] = dateCases[lastIndex - 1]
-		const [, weekAgoConfirmed] = dateCases[lastIndex - DAYS_IN_WEEK]
-		const [, weekAndOneDayAgoConfirmed] = dateCases[lastIndex - 1 - DAYS_IN_WEEK]
+		const lastDate = dateCases[lastIndex].date
 
-		const delta1 = lastConfirmed - weekAgoConfirmed
-		const delta2 = dayBeforeConfirmed - weekAndOneDayAgoConfirmed
+		const delta1 =
+			dateCases[lastIndex].numCases - dateCases[lastIndex - DAYS_RANGE].numCases
+		const delta2 =
+			dateCases[lastIndex - 1].numCases - dateCases[lastIndex - DAYS_RANGE - 1].numCases
 
 		return {
 			isExponential: delta1 > delta2,
