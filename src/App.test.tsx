@@ -90,5 +90,5 @@ it('если была ошибка, отображает ошибку загру
 
 	const { findByText } = render(<App />)
 
-  await findByText(/что-то случилось/)
+	await findByText(/что-то случилось/)
 })

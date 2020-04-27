@@ -15,13 +15,13 @@ type DateCase = { date: Date; numCases: number }
 function formatData(data: string[][]): DateCase[] {
 	const COUNTRY_NAME_INDEX = 1
 
-	const datesStartAtIndex = data[0].findIndex((maybeDate) =>
+	const datesStartAtIndex = data[0].findIndex(maybeDate =>
 		isValid(parseDate(maybeDate, 'M/d/yy', new Date())),
 	)
 
 	const dates = data[0].slice(datesStartAtIndex)
 
-	const russiaData = data.find((row) => /Russia/.test(row[COUNTRY_NAME_INDEX]))
+	const russiaData = data.find(row => /Russia/.test(row[COUNTRY_NAME_INDEX]))
 
 	if (!russiaData) {
 		throw new Error('Error founding data for Russia')
@@ -39,13 +39,13 @@ export default function Graph() {
 
 	useEffect(() => {
 		fetch(SERIES_URL)
-			.then((response) => {
+			.then(response => {
 				if (!response.ok) {
 					throw new Error(`Error loading stats: ${response.status}`)
 				}
 				return response.text()
 			})
-			.then((csv) => {
+			.then(csv => {
 				const { data, errors } = parseCsv(csv)
 				if (errors.length > 0) {
 					throw new Error(errors[0].message)
