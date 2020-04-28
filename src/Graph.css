@@ -9,12 +9,16 @@
 }
 
 .Graph .question {
-	margin-top: 0;
 	font-weight: normal;
 }
 
+.Graph .question:first-child {
+	margin-top: 0;
+}
+
 .Graph .answer {
-	font-size: 4rem;
+	margin: 2rem 0 3rem 0;
+	font-size: 3.5rem;
 }
 
 @keyframes spinZ {

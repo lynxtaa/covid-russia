@@ -1,96 +1,85 @@
-import React, { useState, useEffect, useMemo } from 'react'
-import { parse as parseCsv } from 'papaparse'
-import { parse as parseDate, format as formatDate, isValid } from 'date-fns'
+import React, { useMemo } from 'react'
+import { format as formatDate } from 'date-fns'
 import { ru } from 'date-fns/locale'
 
 import Link from './components/Link'
+import useFetchCsv from './hooks/useFetchCsv'
+import formatData from './utils/formatData'
+import getRanges from './utils/getRanges'
 
 import './Graph.css'
 
 const SERIES_URL =
 	'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv'
 
-type DateCase = { date: Date; numCases: number }
-
-function formatData(data: string[][]): DateCase[] {
-	const COUNTRY_NAME_INDEX = 1
-
-	const datesStartAtIndex = data[0].findIndex(maybeDate =>
-		isValid(parseDate(maybeDate, 'M/d/yy', new Date())),
-	)
-
-	const dates = data[0].slice(datesStartAtIndex)
-
-	const russiaData = data.find(row => /Russia/.test(row[COUNTRY_NAME_INDEX]))
-
-	if (!russiaData) {
-		throw new Error('Error founding data for Russia')
-	}
-
-	return dates.map((date, index) => ({
-		date: parseDate(date, 'M/d/yy', new Date()),
-		numCases: Number(russiaData[index + datesStartAtIndex]),
-	}))
-}
+const SERIES_RU_URL =
+	'https://raw.githubusercontent.com/grwlf/COVID-19_plus_Russia/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_RU.csv'
 
 export default function Graph() {
-	const [dateCases, setDateCases] = useState<DateCase[] | null>(null)
-	const [error, setError] = useState('')
+	const { rows: globalData, error: globalError } = useFetchCsv<string[]>(SERIES_URL)
 
-	useEffect(() => {
-		fetch(SERIES_URL)
-			.then(response => {
-				if (!response.ok) {
-					throw new Error(`Error loading stats: ${response.status}`)
-				}
-				return response.text()
-			})
-			.then(csv => {
-				const { data, errors } = parseCsv(csv)
-				if (errors.length > 0) {
-					throw new Error(errors[0].message)
-				}
-				setDateCases(formatData(data))
-			})
-			.catch((err: Error) => setError(err.message))
-	}, [])
+	const { rows: ruData, error: ruError } = useFetchCsv<string[]>(SERIES_RU_URL)
+
+	const error = globalError || ruError
 
 	const info = useMemo(() => {
-		if (!dateCases) {
+		if (!globalData || !ruData) {
 			return null
 		}
 
-		const DAYS_RANGE = 7
+		const ruCases = formatData({
+			data: globalData,
+			dateFormat: 'M/d/yy',
+			region: 'Russia',
+			regionColumnName: 'Country/Region',
+		})
 
-		const lastIndex = dateCases.length - 1
+		const spbCases = formatData({
+			data: ruData,
+			dateFormat: 'MM/dd/yy',
+			region: 'Saint Petersburg',
+			regionColumnName: 'Province_State',
+		})
 
-		const lastDate = dateCases[lastIndex].date
-
-		const delta1 =
-			dateCases[lastIndex].numCases - dateCases[lastIndex - DAYS_RANGE].numCases
-		const delta2 =
-			dateCases[lastIndex - 1].numCases - dateCases[lastIndex - DAYS_RANGE - 1].numCases
+		const ruRanges = getRanges({ cases: ruCases })
+		const spbRanges = getRanges({ cases: spbCases })
 
 		return {
-			isExponential: delta1 > delta2,
-			updatedAt: formatDate(lastDate, 'd MMMM yyyy', { locale: ru }),
+			ru: {
+				ranges: ruRanges,
+				isExponential: ruRanges[0].diff > ruRanges[1].diff,
+			},
+			spb: {
+				ranges: spbRanges,
+				isExponential: spbRanges[0].diff > spbRanges[1].diff,
+			},
 		}
-	}, [dateCases])
+	}, [globalData, ruData])
 
 	return (
 		<div className="Graph">
 			{error ? (
 				<div className="error">
-					Ой, что-то случилось :( <details>{error}</details>{' '}
+					Ой, что-то случилось :( <details>{error}</details>
 				</div>
 			) : info ? (
 				<>
 					<h1 className="question">
-						Рост случаев COVID19&nbsp;в России экспоненциальный?
+						Рост случаев COVID-19&nbsp;в России экспоненциальный?
 					</h1>
 					<h2 className="answer">
-						{info.isExponential ? 'Да' : 'Нет'}
+						{info.ru.isExponential ? 'Да' : 'Нет'}
 						<Link href="https://aatishb.com/covidtrends/" isExternal>
+							.
+						</Link>
+					</h2>
+					<h1 className="question">А&nbsp;в&nbsp;Санкт-Петербурге?</h1>
+					<h2 className="answer">
+						{info.spb.isExponential ? 'Да' : 'Нет'}
+						<Link
+							href="https://github.com/grwlf/COVID-19_plus_Russia/blob/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_RU.csv"
+							isExternal
+						>
 							.
 						</Link>
 					</h2>
@@ -100,7 +89,7 @@ export default function Graph() {
 							href="https://github.com/CSSEGISandData/COVID-19/blob/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv"
 							isExternal
 						>
-							{info.updatedAt}
+							{formatDate(info.ru.ranges[0].to, 'd MMMM yyyy', { locale: ru })}
 						</Link>
 					</div>
 				</>
