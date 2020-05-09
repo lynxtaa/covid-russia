@@ -1,35 +1,29 @@
-import { parse as parseDate, isValid } from 'date-fns'
+import { parse as parseDate } from 'date-fns'
 
 export type DateCase = { date: Date; numCases: number }
 
 export default function formatData({
+	category = 'total',
 	data,
 	dateFormat,
 	region,
-	regionColumnName,
 }: {
+	category?: 'total' | 'recovered' | 'died'
 	data: string[][]
 	dateFormat: string
 	region: string
-	regionColumnName: string
 }): DateCase[] {
-	const [headerRow] = data
-	const regionColumnIndex = headerRow.findIndex(col => col === regionColumnName)
+	const [headerRow, ...dateRows] = data
+	const regionColumnIndex = headerRow.findIndex(col => col === region)
 
-	const datesStartAtIndex = headerRow.findIndex(maybeDate =>
-		isValid(parseDate(maybeDate, dateFormat, new Date())),
-	)
-
-	const dates = headerRow.slice(datesStartAtIndex)
-
-	const targetRow = data.find(row => row[regionColumnIndex] === region)
-
-	if (!targetRow) {
+	if (regionColumnIndex === -1) {
 		throw new Error(`No data for ${region}`)
 	}
 
-	return dates.map((date, index) => ({
-		date: parseDate(date, 'M/d/yy', new Date()),
-		numCases: Number(targetRow[index + datesStartAtIndex]),
-	}))
+	return dateRows
+		.filter(dateRow => dateRow[1] === category)
+		.map(dateRow => ({
+			date: parseDate(dateRow[0], dateFormat, new Date()),
+			numCases: Number(dateRow[regionColumnIndex]),
+		}))
 }

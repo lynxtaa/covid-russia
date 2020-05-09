@@ -9,36 +9,27 @@ import getRanges from './utils/getRanges'
 
 import './Graph.css'
 
-const SERIES_URL =
-	'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv'
-
-const SERIES_RU_URL =
-	'https://raw.githubusercontent.com/grwlf/COVID-19_plus_Russia/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_RU.csv'
+const URL =
+	'https://raw.githubusercontent.com/PhtRaveller/covid19-ru/master/data/covid_stats.csv'
 
 export default function Graph() {
-	const { rows: globalData, error: globalError } = useFetchCsv<string[]>(SERIES_URL)
-
-	const { rows: ruData, error: ruError } = useFetchCsv<string[]>(SERIES_RU_URL)
-
-	const error = globalError || ruError
+	const { rows, error } = useFetchCsv<string[]>(URL)
 
 	const info = useMemo(() => {
-		if (!globalData || !ruData) {
+		if (!rows) {
 			return null
 		}
 
 		const ruCases = formatData({
-			data: globalData,
-			dateFormat: 'M/d/yy',
-			region: 'Russia',
-			regionColumnName: 'Country/Region',
+			data: rows,
+			dateFormat: 'dd.MM.yyyy',
+			region: 'Россия',
 		})
 
 		const spbCases = formatData({
-			data: ruData,
-			dateFormat: 'MM/dd/yy',
-			region: 'Saint Petersburg',
-			regionColumnName: 'Province_State',
+			data: rows,
+			dateFormat: 'dd.MM.yyyy',
+			region: 'Санкт-Петербург',
 		})
 
 		const ruRanges = getRanges({ cases: ruCases })
@@ -54,7 +45,7 @@ export default function Graph() {
 				isExponential: spbRanges[0].diff > spbRanges[1].diff,
 			},
 		}
-	}, [globalData, ruData])
+	}, [rows])
 
 	return (
 		<div className="Graph">
@@ -77,20 +68,14 @@ export default function Graph() {
 					<h2 className="answer">
 						{info.spb.isExponential ? 'Да' : 'Нет'}
 						<Link
-							href="https://github.com/grwlf/COVID-19_plus_Russia/blob/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_RU.csv"
+							href="https://github.com/PhtRaveller/covid19-ru/blob/master/data/covid_stats.csv"
 							isExternal
 						>
 							.
 						</Link>
 					</h2>
 					<div className="footer">
-						Обновлено{' '}
-						<Link
-							href="https://github.com/CSSEGISandData/COVID-19/blob/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv"
-							isExternal
-						>
-							{formatDate(info.ru.ranges[0].to, 'd MMMM yyyy', { locale: ru })}
-						</Link>
+						Обновлено {formatDate(info.ru.ranges[0].to, 'd MMMM yyyy', { locale: ru })}
 					</div>
 				</>
 			) : (
