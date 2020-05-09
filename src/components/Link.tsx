@@ -1,7 +1,7 @@
 import React from 'react'
 import cn from 'classnames'
 
-import './Link.css'
+import styles from './Link.module.css'
 
 type Props = {
 	isExternal?: boolean
@@ -15,7 +15,7 @@ export default function Link({ isExternal, children, className, ...rest }: Props
 		: undefined
 
 	return (
-		<a {...externalProps} {...rest} className={cn('Link', className)}>
+		<a {...externalProps} {...rest} className={cn(styles.link, className)}>
 			{children}
 		</a>
 	)

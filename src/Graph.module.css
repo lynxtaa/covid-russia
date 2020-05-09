@@ -1,22 +1,18 @@
-.Graph {
+.container {
 	display: flex;
 	flex-direction: column;
 	height: 100%;
 }
 
-.Graph .footer {
+.footer {
 	margin-top: auto;
 }
 
-.Graph .question {
+.question {
 	font-weight: normal;
 }
 
-.Graph .question:first-child {
-	margin-top: 0;
-}
-
-.Graph .answer {
+.answer {
 	margin: 2rem 0 3rem 0;
 	font-size: 3.5rem;
 }
@@ -30,16 +26,15 @@
 	}
 }
 
-.Graph .loading {
-	animation: 10s linear spinZ;
-	animation-iteration-count: infinite;
+.loading {
+	animation: spinZ 10s infinite linear;
 	align-self: center;
 	justify-self: center;
 	margin: auto;
 	font-size: 7rem;
 }
 
-.Graph .error {
+.error {
 	font-size: 2rem;
 	color: #ff8282;
 }

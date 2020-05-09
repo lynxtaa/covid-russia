@@ -7,7 +7,7 @@ import useFetchCsv from './hooks/useFetchCsv'
 import formatData from './utils/formatData'
 import getRanges from './utils/getRanges'
 
-import './Graph.css'
+import styles from './Graph.module.css'
 
 const URL =
 	'https://raw.githubusercontent.com/PhtRaveller/covid19-ru/master/data/covid_stats.csv'
@@ -48,24 +48,24 @@ export default function Graph() {
 	}, [rows])
 
 	return (
-		<div className="Graph">
+		<div className={styles.container}>
 			{error ? (
-				<div className="error">
+				<div className={styles.error}>
 					Ой, что-то случилось :( <details>{error}</details>
 				</div>
 			) : info ? (
 				<>
-					<h1 className="question">
+					<h1 className={styles.question}>
 						Рост случаев COVID-19&nbsp;в России экспоненциальный?
 					</h1>
-					<h2 className="answer">
+					<h2 className={styles.answer}>
 						{info.ru.isExponential ? 'Да' : 'Нет'}
 						<Link href="https://aatishb.com/covidtrends/" isExternal>
 							.
 						</Link>
 					</h2>
-					<h1 className="question">А&nbsp;в&nbsp;Санкт-Петербурге?</h1>
-					<h2 className="answer">
+					<h1 className={styles.question}>А&nbsp;в&nbsp;Санкт-Петербурге?</h1>
+					<h2 className={styles.answer}>
 						{info.spb.isExponential ? 'Да' : 'Нет'}
 						<Link
 							href="https://github.com/PhtRaveller/covid19-ru/blob/master/data/covid_stats.csv"
@@ -74,12 +74,12 @@ export default function Graph() {
 							.
 						</Link>
 					</h2>
-					<div className="footer">
+					<div className={styles.footer}>
 						Обновлено {formatDate(info.ru.ranges[0].to, 'd MMMM yyyy', { locale: ru })}
 					</div>
 				</>
 			) : (
-				<div className="loading">
+				<div className={styles.loading}>
 					<span role="img" aria-label="virus">
 						🦠
 					</span>
