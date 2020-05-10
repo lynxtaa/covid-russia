@@ -16,6 +16,12 @@ body,
 	height: 100%;
 }
 
+@media (min-width: 576px) {
+	body {
+		font-size: 18px;
+	}
+}
+
 body {
 	--bg: #282c35;
 	--textColor: rgba(255, 255, 255, 0.88);
