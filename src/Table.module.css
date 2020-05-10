@@ -1,0 +1,15 @@
+.table {
+	border-collapse: collapse;
+	margin: 1rem 0 2rem 0;
+	width: 100%;
+}
+
+.table td,
+th {
+	font-size: 110%;
+	padding: 0.4rem 0.7rem;
+}
+
+.table tr:first-child td {
+	border-bottom: 1px solid var(--textColor);
+}

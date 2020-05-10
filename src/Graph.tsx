@@ -7,9 +7,9 @@ import Link from './components/Link'
 import useFetchCsv from './hooks/useFetchCsv'
 import formatData from './utils/formatData'
 import getRanges from './utils/getRanges'
-import Counter from './Counter'
 
 import styles from './Graph.module.css'
+import Table from './Table'
 
 const URL =
 	'https://raw.githubusercontent.com/PhtRaveller/covid19-ru/master/data/covid_stats.csv'
@@ -39,15 +39,11 @@ export default function Graph() {
 		return {
 			ru: {
 				ranges: getRanges({ cases: ruCases }),
-				total: ruCases[ruCases.length - 1].total,
-				recovered: ruCases[ruCases.length - 1].recovered,
-				died: ruCases[ruCases.length - 1].died,
+				cases: ruCases,
 			},
 			spb: {
 				ranges: getRanges({ cases: spbCases }),
-				total: spbCases[spbCases.length - 1].total,
-				recovered: spbCases[spbCases.length - 1].recovered,
-				died: spbCases[spbCases.length - 1].died,
+				cases: spbCases,
 			},
 		}
 	}, [rows])
@@ -80,7 +76,11 @@ export default function Graph() {
 						</Link>
 					</h2>
 					<div>
-						{(['total', 'recovered', 'died'] as const).map(type => (
+						{([
+							['total', 'выявлено'],
+							['recovered', 'излечилось'],
+							['died', 'умерло'],
+						] as const).map(([type, text]) => (
 							<button
 								key={type}
 								type="button"
@@ -90,63 +90,11 @@ export default function Graph() {
 								)}
 								onClick={() => setSelected(type)}
 							>
-								{type === 'total'
-									? 'выявлено'
-									: type === 'recovered'
-									? 'излечилось'
-									: 'умерло'}
+								{text}
 							</button>
 						))}
 					</div>
-					<table className={styles.table}>
-						<thead>
-							<tr>
-								<th></th>
-								<th align="right">всего</th>
-								<th align="right">за 7 дней</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<td>СПб</td>
-								<td align="right">
-									<Counter>{info.spb[selected]}</Counter>
-								</td>
-								<td align="right">
-									<Counter>
-										{
-											info.spb.ranges[1][
-												selected === 'total'
-													? 'diffTotal'
-													: selected === 'died'
-													? 'diffDied'
-													: 'diffRecovered'
-											]
-										}
-									</Counter>
-								</td>
-							</tr>
-							<tr>
-								<td>Россия</td>
-								<td align="right">
-									<Counter>{info.ru[selected]}</Counter>
-								</td>
-								<td align="right">
-									<Counter>
-										{
-											info.ru.ranges[1][
-												selected === 'total'
-													? 'diffTotal'
-													: selected === 'died'
-													? 'diffDied'
-													: 'diffRecovered'
-											]
-										}
-									</Counter>
-								</td>
-							</tr>
-						</tbody>
-					</table>
+					<Table ru={info.ru} spb={info.spb} selected={selected} />
 					<div className={styles.footer}>
 						Обновлено {formatDate(info.ru.ranges[1].to, 'd MMMM yyyy', { locale: ru })}
 					</div>
