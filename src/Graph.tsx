@@ -148,7 +148,7 @@ export default function Graph() {
 						</tbody>
 					</table>
 					<div className={styles.footer}>
-						Обновлено {formatDate(info.ru.ranges[0].to, 'd MMMM yyyy', { locale: ru })}
+						Обновлено {formatDate(info.ru.ranges[1].to, 'd MMMM yyyy', { locale: ru })}
 					</div>
 				</>
 			) : (
