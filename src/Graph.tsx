@@ -60,18 +60,17 @@ export default function Graph() {
 						Рост случаев COVID-19&nbsp;в России экспоненциальный?
 					</h1>
 					<h2 className={styles.answer}>
-						{info.ru.ranges[1].diffTotal > info.ru.ranges[0].diffTotal ? 'Да' : 'Нет'}
 						<Link href="https://aatishb.com/covidtrends/" isExternal>
-							.
+							{info.ru.ranges[1].diffTotal > info.ru.ranges[0].diffTotal ? 'Да' : 'Нет'}.
 						</Link>
 					</h2>
 					<h1 className={styles.question}>А&nbsp;в&nbsp;Санкт-Петербурге?</h1>
 					<h2 className={styles.answer}>
-						{info.spb.ranges[1].diffTotal > info.spb.ranges[0].diffTotal ? 'Да' : 'Нет'}
 						<Link
 							href="https://github.com/PhtRaveller/covid19-ru/blob/master/data/covid_stats.csv"
 							isExternal
 						>
+							{info.spb.ranges[1].diffTotal > info.spb.ranges[0].diffTotal ? 'Да' : 'Нет'}
 							.
 						</Link>
 					</h2>
