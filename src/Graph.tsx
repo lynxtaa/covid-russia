@@ -2,11 +2,12 @@ import cn from 'classnames'
 import React, { useMemo, useState } from 'react'
 import { format as formatDate } from 'date-fns'
 import { ru } from 'date-fns/locale'
+import useSWR from 'swr'
 
 import Link from './components/Link'
-import useFetchCsv from './hooks/useFetchCsv'
 import formatData from './utils/formatData'
 import getRanges from './utils/getRanges'
+import csvFetcher from './utils/csvFetcher'
 
 import styles from './Graph.module.css'
 import Table from './Table'
@@ -17,21 +18,23 @@ const URL =
 export default function Graph() {
 	const [selected, setSelected] = useState<'total' | 'died' | 'recovered'>('total')
 
-	const { rows, error } = useFetchCsv<string[]>(URL)
+	const { data, error } = useSWR<string[][], Error>(URL, csvFetcher, {
+		focusThrottleInterval: 30000,
+	})
 
 	const info = useMemo(() => {
-		if (!rows) {
+		if (!data) {
 			return null
 		}
 
 		const ruCases = formatData({
-			data: rows,
+			data: data,
 			dateFormat: 'dd.MM.yyyy',
 			region: 'Россия',
 		})
 
 		const spbCases = formatData({
-			data: rows,
+			data: data,
 			dateFormat: 'dd.MM.yyyy',
 			region: 'Санкт-Петербург',
 		})
@@ -46,7 +49,7 @@ export default function Graph() {
 				cases: spbCases,
 			},
 		}
-	}, [rows])
+	}, [data])
 
 	return (
 		<div className={styles.container}>
