@@ -1,5 +1,6 @@
 import React from 'react'
 import { format as formatDate, isToday, isYesterday } from 'date-fns'
+import { ru as ruLang } from 'date-fns/locale'
 
 import last from './utils/last'
 import Counter from './Counter'
@@ -43,7 +44,7 @@ export default function Table({ ru, spb, selected }: Props) {
 							? 'сегодня'
 							: isYesterday(last(ru.cases).date)
 							? 'вчера'
-							: formatDate(last(ru.cases).date, 'd MMM')}
+							: formatDate(last(ru.cases).date, 'd MMM', { locale: ruLang })}
 					</th>
 				</tr>
 			</thead>

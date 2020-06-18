@@ -8,7 +8,7 @@ export default async function csvFetcher(url: string) {
 	}
 
 	const csv = await response.text()
-	const { data, errors } = parseCsv(csv)
+	const { data, errors } = parseCsv<string[]>(csv)
 
 	if (errors.length > 0) {
 		throw new Error(errors[0].message)
