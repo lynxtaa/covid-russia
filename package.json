@@ -4,7 +4,6 @@
   "private": true,
   "author": "Alex Kondratyuk <lynxtaa@gmail.com>",
   "repository": "https://github.com/lynxtaa/covid-russia.git",
-  "homepage": "http://lynxtaa.github.io/covid-russia",
   "husky": {
     "hooks": {
       "pre-commit": "pretty-quick --staged"
