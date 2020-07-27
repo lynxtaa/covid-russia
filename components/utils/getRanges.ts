@@ -1,4 +1,5 @@
-import { DateStats } from './formatData'
+import { DateStats } from '../../lib/formatData'
+import { parseISO } from 'date-fns'
 
 export default function getRanges({
 	cases,
@@ -21,8 +22,8 @@ export default function getRanges({
 
 	for (let i = 0; i < numRanges; i++) {
 		ranges.push({
-			from: cases[lastIndex - i - daysRange].date,
-			to: cases[lastIndex - i].date,
+			from: parseISO(cases[lastIndex - i - daysRange].date),
+			to: parseISO(cases[lastIndex - i].date),
 			diffTotal: cases[lastIndex - i].total - cases[lastIndex - i - daysRange].total,
 			diffDied: cases[lastIndex - i].died - cases[lastIndex - i - daysRange].died,
 			diffRecovered:

@@ -5,21 +5,30 @@ import { ru } from 'date-fns/locale'
 import useSWR from 'swr'
 
 import Link from './components/Link'
-import formatData from './utils/formatData'
 import getRanges from './utils/getRanges'
-import csvFetcher from './utils/csvFetcher'
+import statsFetcher from '../lib/statsFetcher'
 
 import styles from './Graph.module.css'
 import Table from './Table'
+import { DateStats } from '../lib/formatData'
 
 const URL =
 	'https://raw.githubusercontent.com/PhtRaveller/covid19-ru/master/data/covid_stats.csv'
 
-export default function Graph() {
+type Props = {
+	initialData: {
+		ruCases: DateStats[]
+		spbCases: DateStats[]
+	}
+}
+
+export default function Graph({ initialData }: Props) {
 	const [selected, setSelected] = useState<'total' | 'died' | 'recovered'>('total')
 
-	const { data, error } = useSWR<string[][], Error>(URL, csvFetcher, {
+	const { data, error } = useSWR<typeof initialData, Error>(URL, statsFetcher, {
 		focusThrottleInterval: 30000,
+		initialData,
+		revalidateOnMount: true,
 	})
 
 	const info = useMemo(() => {
@@ -27,17 +36,7 @@ export default function Graph() {
 			return null
 		}
 
-		const ruCases = formatData({
-			data: data,
-			dateFormat: 'dd.MM.yyyy',
-			region: 'Россия',
-		})
-
-		const spbCases = formatData({
-			data: data,
-			dateFormat: 'dd.MM.yyyy',
-			region: 'Санкт-Петербург',
-		})
+		const { ruCases, spbCases } = data
 
 		return {
 			ru: {

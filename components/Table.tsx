@@ -1,12 +1,12 @@
 import React from 'react'
-import { format as formatDate, isToday, isYesterday } from 'date-fns'
+import { format as formatDate, isToday, isYesterday, parseISO } from 'date-fns'
 import { ru as ruLang } from 'date-fns/locale'
 
 import last from './utils/last'
 import Counter from './Counter'
 
 import styles from './Table.module.css'
-import { DateStats } from './utils/formatData'
+import { DateStats } from '../lib/formatData'
 
 type Props = {
 	ru: {
@@ -40,11 +40,11 @@ export default function Table({ ru, spb, selected }: Props) {
 					<th></th>
 					<th align="right">всего</th>
 					<th align="right">
-						{isToday(last(ru.cases).date)
+						{isToday(parseISO(last(ru.cases).date))
 							? 'сегодня'
-							: isYesterday(last(ru.cases).date)
+							: isYesterday(parseISO(last(ru.cases).date))
 							? 'вчера'
-							: formatDate(last(ru.cases).date, 'd MMM', { locale: ruLang })}
+							: formatDate(parseISO(last(ru.cases).date), 'd MMM', { locale: ruLang })}
 					</th>
 				</tr>
 			</thead>

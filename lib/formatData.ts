@@ -1,7 +1,7 @@
 import { parse as parseDate } from 'date-fns'
 
 export type DateStats = {
-	date: Date
+	date: string
 	total: number
 	recovered: number
 	died: number
@@ -33,7 +33,7 @@ export default function formatData({
 		dateRows
 			.filter(dateRow => dateRow[1] === category)
 			.map(dateRow => ({
-				date: parseDate(dateRow[0], dateFormat, new Date()),
+				date: parseDate(dateRow[0], dateFormat, new Date()).toISOString(),
 				numCases: Number(dateRow[regionColumnIndex]),
 			}))
 
