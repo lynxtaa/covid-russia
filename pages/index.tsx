@@ -1,8 +1,9 @@
-import App from '../components/App'
 import { GetStaticProps } from 'next'
-import statsFetcher from '../lib/statsFetcher'
+
+import App from '../components/App'
 import Graph from '../components/Graph'
 import { DateStats } from '../lib/formatData'
+import statsFetcher from '../lib/statsFetcher'
 
 type Props = {
 	initialData: {
@@ -26,5 +27,8 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
 		'https://raw.githubusercontent.com/PhtRaveller/covid19-ru/master/data/covid_stats.csv',
 	)
 
-	return { props: { initialData } }
+	return {
+		props: { initialData },
+		revalidate: 12 * 60 * 60, // every 12 hours
+	}
 }
