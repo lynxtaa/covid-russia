@@ -29,6 +29,6 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
 
 	return {
 		props: { initialData },
-		revalidate: 12 * 60 * 60, // every 12 hours
+		revalidate: 6 * 60 * 60, // every 6 hours
 	}
 }
