@@ -6,16 +6,16 @@ import last from './utils/last'
 import Counter from './Counter'
 
 import styles from './Table.module.css'
-import { DateStats } from '../lib/formatData'
+import { Category, DateStats } from '../lib/formatData'
 
 type Props = {
 	ru: {
 		ranges: {
 			from: Date
 			to: Date
-			diffTotal: number
+			diffSick: number
 			diffDied: number
-			diffRecovered: number
+			diffHealed: number
 		}[]
 		cases: DateStats[]
 	}
@@ -23,13 +23,13 @@ type Props = {
 		ranges: {
 			from: Date
 			to: Date
-			diffTotal: number
+			diffSick: number
 			diffDied: number
-			diffRecovered: number
+			diffHealed: number
 		}[]
 		cases: DateStats[]
 	}
-	selected: 'total' | 'died' | 'recovered'
+	selected: Category
 }
 
 export default function Table({ ru, spb, selected }: Props) {

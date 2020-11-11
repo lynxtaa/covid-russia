@@ -1,16 +1,16 @@
 import { parse as parseDate } from 'date-fns'
 
-export type DateStats = {
-	date: string
-	total: number
-	recovered: number
-	died: number
+export enum Category {
+	Sick = 'sick',
+	Healed = 'healed',
+	Died = 'died',
 }
 
-enum Category {
-	total = 'total',
-	recovered = 'recovered',
-	died = 'died',
+export type DateStats = {
+	date: string
+	[Category.Sick]: number
+	[Category.Healed]: number
+	[Category.Died]: number
 }
 
 export default function formatData({
@@ -37,16 +37,16 @@ export default function formatData({
 				numCases: Number(dateRow[regionColumnIndex]),
 			}))
 
-	const total = getStats(Category.total)
+	const sick = getStats(Category.Sick)
 
-	const recovered = getStats(Category.recovered)
+	const healed = getStats(Category.Healed)
 
-	const died = getStats(Category.died)
+	const died = getStats(Category.Died)
 
-	return total.map((stats, i) => ({
+	return sick.map((stats, i) => ({
 		date: stats.date,
-		total: stats.numCases,
-		recovered: recovered[i].numCases,
+		sick: stats.numCases,
+		healed: healed[i].numCases,
 		died: died[i].numCases,
 	}))
 }

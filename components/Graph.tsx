@@ -6,14 +6,11 @@ import useSWR from 'swr'
 
 import Link from './components/Link'
 import getRanges from './utils/getRanges'
-import statsFetcher from '../lib/statsFetcher'
+import { DATA_SOURCE_URL, statsFetcher } from '../lib/statsFetcher'
 
 import styles from './Graph.module.css'
 import Table from './Table'
-import { DateStats } from '../lib/formatData'
-
-const URL =
-	'https://raw.githubusercontent.com/PhtRaveller/covid19-ru/master/data/covid_stats.csv'
+import { Category, DateStats } from '../lib/formatData'
 
 type Props = {
 	initialData: {
@@ -23,13 +20,17 @@ type Props = {
 }
 
 export default function Graph({ initialData }: Props) {
-	const [selected, setSelected] = useState<'total' | 'died' | 'recovered'>('total')
+	const [selected, setSelected] = useState<Category>(Category.Sick)
 
-	const { data, error } = useSWR<typeof initialData, Error>(URL, statsFetcher, {
-		focusThrottleInterval: 30000,
-		initialData,
-		revalidateOnMount: true,
-	})
+	const { data, error } = useSWR<typeof initialData, Error>(
+		DATA_SOURCE_URL,
+		statsFetcher,
+		{
+			focusThrottleInterval: 30000,
+			initialData,
+			revalidateOnMount: true,
+		},
+	)
 
 	const info = useMemo(() => {
 		if (!data) {
@@ -63,24 +64,23 @@ export default function Graph({ initialData }: Props) {
 					</h1>
 					<h2 className={styles.answer}>
 						<Link href="https://aatishb.com/covidtrends/" isExternal>
-							{info.ru.ranges[1].diffTotal > info.ru.ranges[0].diffTotal ? 'Да' : 'Нет'}.
+							{info.ru.ranges[1].diffSick > info.ru.ranges[0].diffSick ? 'Да' : 'Нет'}.
 						</Link>
 					</h2>
 					<h1 className={styles.question}>А&nbsp;в&nbsp;Санкт-Петербурге?</h1>
 					<h2 className={styles.answer}>
 						<Link
-							href="https://github.com/PhtRaveller/covid19-ru/blob/master/data/covid_stats.csv"
+							href="https://github.com/lynxtaa/covid-stats-russia/blob/master/covid_stats.csv"
 							isExternal
 						>
-							{info.spb.ranges[1].diffTotal > info.spb.ranges[0].diffTotal ? 'Да' : 'Нет'}
-							.
+							{info.spb.ranges[1].diffSick > info.spb.ranges[0].diffSick ? 'Да' : 'Нет'}.
 						</Link>
 					</h2>
 					<div>
 						{([
-							['total', 'выявлено'],
-							['recovered', 'излечилось'],
-							['died', 'умерло'],
+							[Category.Sick, 'выявлено'],
+							[Category.Healed, 'излечилось'],
+							[Category.Died, 'умерло'],
 						] as const).map(([type, text]) => (
 							<button
 								key={type}

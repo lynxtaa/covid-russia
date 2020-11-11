@@ -15,19 +15,18 @@ export default function getRanges({
 	const ranges: {
 		from: Date
 		to: Date
-		diffTotal: number
+		diffSick: number
 		diffDied: number
-		diffRecovered: number
+		diffHealed: number
 	}[] = []
 
 	for (let i = 0; i < numRanges; i++) {
 		ranges.push({
 			from: parseISO(cases[lastIndex - i - daysRange].date),
 			to: parseISO(cases[lastIndex - i].date),
-			diffTotal: cases[lastIndex - i].total - cases[lastIndex - i - daysRange].total,
+			diffSick: cases[lastIndex - i].sick - cases[lastIndex - i - daysRange].sick,
 			diffDied: cases[lastIndex - i].died - cases[lastIndex - i - daysRange].died,
-			diffRecovered:
-				cases[lastIndex - i].recovered - cases[lastIndex - i - daysRange].recovered,
+			diffHealed: cases[lastIndex - i].healed - cases[lastIndex - i - daysRange].healed,
 		})
 	}
 

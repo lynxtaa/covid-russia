@@ -61,7 +61,6 @@
     "build": "next build",
     "start": "next start",
     "export": "next export",
-    "test": "react-scripts test --env jest-environment-jsdom-fifteen",
-    "serve": "npx serve -s out"
+    "lint": "eslint --ext .ts,.js,.tsx components lib pages"
   }
 }

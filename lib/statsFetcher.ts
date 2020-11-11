@@ -1,7 +1,11 @@
 import { parse as parseCsv } from 'papaparse'
+
 import formatData, { DateStats } from './formatData'
 
-export default async function csvFetcher(
+export const DATA_SOURCE_URL =
+	'https://raw.githubusercontent.com/lynxtaa/covid-stats-russia/master/covid_stats.csv'
+
+export async function statsFetcher(
 	url: string,
 ): Promise<{
 	ruCases: DateStats[]
