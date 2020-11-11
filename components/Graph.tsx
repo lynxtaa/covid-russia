@@ -1,5 +1,5 @@
 import cn from 'classnames'
-import React, { useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { format as formatDate } from 'date-fns'
 import { ru } from 'date-fns/locale'
 import useSWR from 'swr'

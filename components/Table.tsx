@@ -1,4 +1,3 @@
-import React from 'react'
 import { format as formatDate, isToday, isYesterday, parseISO } from 'date-fns'
 import { ru as ruLang } from 'date-fns/locale'
 

@@ -1,11 +1,11 @@
 import { AppProps } from 'next/app'
 import Head from 'next/head'
-import React from 'react'
+import { StrictMode } from 'react'
 
 import '../styles/global.css'
 
 const App = ({ Component, pageProps }: AppProps) => (
-	<React.StrictMode>
+	<StrictMode>
 		<Head>
 			<meta charSet="utf-8" />
 			<link rel="icon" href="/favicon.ico" />
@@ -26,7 +26,7 @@ const App = ({ Component, pageProps }: AppProps) => (
 			<title>COVID Russia</title>
 		</Head>
 		<Component {...pageProps} />
-	</React.StrictMode>
+	</StrictMode>
 )
 
 export default App
