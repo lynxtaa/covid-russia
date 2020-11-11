@@ -1,4 +1,4 @@
-import { parse as parseDate } from 'date-fns'
+import { parseISO } from 'date-fns'
 
 export enum Category {
 	Sick = 'sick',
@@ -15,11 +15,9 @@ export type DateStats = {
 
 export default function formatData({
 	data,
-	dateFormat,
 	region,
 }: {
 	data: string[][]
-	dateFormat: string
 	region: string
 }): DateStats[] {
 	const [headerRow, ...dateRows] = data
@@ -33,7 +31,7 @@ export default function formatData({
 		dateRows
 			.filter(dateRow => dateRow[1] === category)
 			.map(dateRow => ({
-				date: parseDate(dateRow[0], dateFormat, new Date()).toISOString(),
+				date: parseISO(dateRow[0]).toISOString(),
 				numCases: Number(dateRow[regionColumnIndex]),
 			}))
 

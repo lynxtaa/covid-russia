@@ -26,13 +26,11 @@ export async function statsFetcher(
 
 	const ruCases = formatData({
 		data,
-		dateFormat: 'dd.MM.yyyy',
 		region: 'Россия',
 	})
 
 	const spbCases = formatData({
 		data,
-		dateFormat: 'dd.MM.yyyy',
 		region: 'Санкт-Петербург',
 	})
 
