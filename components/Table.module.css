@@ -13,3 +13,7 @@
 .table tr:first-child td {
 	border-bottom: 1px solid var(--textColor);
 }
+
+.chartContainer canvas {
+	margin-bottom: 1rem;
+}
