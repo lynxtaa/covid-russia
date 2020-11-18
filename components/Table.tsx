@@ -9,26 +9,8 @@ import styles from './Table.module.css'
 import { Category, DateStats } from '../lib/formatData'
 
 type Props = {
-	ru: {
-		ranges: {
-			from: Date
-			to: Date
-			diffSick: number
-			diffDied: number
-			diffHealed: number
-		}[]
-		cases: DateStats[]
-	}
-	spb: {
-		ranges: {
-			from: Date
-			to: Date
-			diffSick: number
-			diffDied: number
-			diffHealed: number
-		}[]
-		cases: DateStats[]
-	}
+	ru: { cases: DateStats[] }
+	spb: { cases: DateStats[] }
 	selected: Category
 }
 
