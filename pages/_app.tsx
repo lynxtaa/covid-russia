@@ -2,6 +2,8 @@ import { AppProps } from 'next/app'
 import Head from 'next/head'
 import { StrictMode } from 'react'
 
+import 'focus-visible'
+
 import '../styles/global.css'
 
 const App = ({ Component, pageProps }: AppProps) => (
