@@ -1,0 +1,14 @@
+.Button {
+	border: none;
+	background: var(--bg);
+	color: var(--textColor);
+	padding: 0.5rem 0.75rem;
+	border-radius: 0.25rem;
+	border: thin solid #3b3b3b;
+}
+
+.ButtonActive {
+	background: var(--textColor);
+	color: var(--bg);
+	border: thin solid var(--textColor);
+}

@@ -1,16 +1,13 @@
 import { parse as parseCsv } from 'papaparse'
 
-import formatData, { DateStats } from './formatData'
+import formatData, { DateStats, Region } from './formatData'
 
 export const DATA_SOURCE_URL =
 	'https://raw.githubusercontent.com/lynxtaa/covid-stats-russia/master/covid_stats.csv'
 
 export async function statsFetcher(
 	url: string,
-): Promise<{
-	ruCases: DateStats[]
-	spbCases: DateStats[]
-}> {
+): Promise<{ region: Region; stats: DateStats[] }[]> {
 	const response = await fetch(url)
 
 	if (!response.ok) {
@@ -24,15 +21,8 @@ export async function statsFetcher(
 		throw new Error(errors[0].message)
 	}
 
-	const ruCases = formatData({
-		data,
-		region: 'Россия',
-	})
-
-	const spbCases = formatData({
-		data,
-		region: 'Санкт-Петербург',
-	})
-
-	return { ruCases, spbCases }
+	return Object.values(Region).map(region => ({
+		region,
+		stats: formatData({ data, region }),
+	}))
 }

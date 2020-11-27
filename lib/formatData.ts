@@ -13,12 +13,17 @@ export type DateStats = {
 	[Category.Died]: number
 }
 
+export enum Region {
+	Ru = 'Россия',
+	Spb = 'Санкт-Петербург',
+}
+
 export default function formatData({
 	data,
 	region,
 }: {
 	data: string[][]
-	region: string
+	region: Region
 }): DateStats[] {
 	const [headerRow, ...dateRows] = data
 	const regionColumnIndex = headerRow.findIndex(col => col === region)

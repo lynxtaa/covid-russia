@@ -1,19 +1,18 @@
 .table {
-	border-collapse: collapse;
-	margin: 1rem 0 2rem 0;
-	width: 100%;
+	display: flex;
+	margin-bottom: 2.5rem;
+	justify-content: space-evenly;
 }
 
-.table td,
-.table th {
-	font-size: 110%;
-	padding: 0.4rem 0.7rem;
+.counter {
+	text-align: center;
+	font-size: 1.4rem;
 }
 
-.table tr:first-child td {
-	border-bottom: 1px solid var(--textColor);
+.counter div:first-child {
+	margin-bottom: 0.5rem;
 }
 
-.chartContainer canvas {
-	margin-bottom: 1rem;
+.counter span {
+	font-weight: bold;
 }

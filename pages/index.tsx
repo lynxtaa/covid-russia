@@ -1,24 +1,22 @@
 import { GetStaticProps } from 'next'
 
 import App from '../components/App'
-import Graph from '../components/Graph'
-import { DateStats } from '../lib/formatData'
+import Page from '../components/Page'
+import { DateStats, Region } from '../lib/formatData'
 import { statsFetcher, DATA_SOURCE_URL } from '../lib/statsFetcher'
 
 type Props = {
 	initialData: {
-		ruCases: DateStats[]
-		spbCases: DateStats[]
-	}
+		region: Region
+		stats: DateStats[]
+	}[]
 }
 
 export default function Home({ initialData }: Props) {
 	return (
-		<div id="root">
-			<App>
-				<Graph initialData={initialData} />
-			</App>
-		</div>
+		<App>
+			<Page initialData={initialData} />
+		</App>
 	)
 }
 
