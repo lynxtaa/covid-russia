@@ -16,6 +16,16 @@ export default function Graph({ className, stats, region }: Props) {
 			<Line
 				options={{
 					legend: { display: false },
+					scales: {
+						yAxes: [
+							{
+								ticks: {
+									callback: (label, index, labels) =>
+										Number(label).toLocaleString('ru-RU'),
+								},
+							},
+						],
+					},
 				}}
 				data={{
 					labels: stats
