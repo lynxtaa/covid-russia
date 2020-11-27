@@ -35,7 +35,7 @@ export default function Page({ initialData }: Props) {
 	const currentRegion = data?.find(el => el.region === region)
 
 	return (
-		<div className={styles.container}>
+		<div>
 			{error ? (
 				<div className={styles.error}>
 					Ой, что-то случилось :( <details>{error}</details>
