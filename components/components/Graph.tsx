@@ -30,7 +30,11 @@ export default function Graph({ className, stats, region }: Props) {
 				data={{
 					labels: stats
 						.slice(-14)
-						.map(c => formatDate(parseISO(c.date), 'd MMM', { locale: ruLang })),
+						.map((c, i) =>
+							i % 2 === 1
+								? formatDate(parseISO(c.date), 'd MMM', { locale: ruLang })
+								: '',
+						),
 					datasets: [
 						{
 							label: region,
