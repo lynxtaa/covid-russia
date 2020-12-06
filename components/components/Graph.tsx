@@ -1,4 +1,4 @@
-import { Line } from 'react-chartjs-2'
+import { Bar } from 'react-chartjs-2'
 import { format as formatDate, parseISO } from 'date-fns'
 import { ru as ruLang } from 'date-fns/locale'
 
@@ -13,7 +13,7 @@ type Props = {
 export default function Graph({ className, stats, region }: Props) {
 	return (
 		<div className={className}>
-			<Line
+			<Bar
 				options={{
 					legend: { display: false },
 					scales: {
