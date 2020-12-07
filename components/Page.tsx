@@ -50,7 +50,7 @@ export default function Page({ initialData }: Props) {
 							href="https://github.com/lynxtaa/covid-stats-russia/blob/master/covid_stats.csv"
 							isExternal
 						>
-							{checkIfGrowing(currentRegion.stats) ? 'растёт.' : 'убывает.'}
+							{checkIfGrowing(currentRegion.stats) ? 'растёт.' : <>не&#32;растёт.</>}
 						</Link>
 					</h1>
 					<Table stats={currentRegion.stats} selected={selected} />
