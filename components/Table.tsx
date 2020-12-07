@@ -1,11 +1,11 @@
 import { format as formatDate, isToday, isYesterday, parseISO } from 'date-fns'
 import { ru as ruLang } from 'date-fns/locale'
 
-import last from './utils/last'
-import Counter from './Counter'
-
-import styles from './Table.module.css'
 import { Category, DateStats } from '../lib/formatData'
+
+import Counter from './Counter'
+import styles from './Table.module.css'
+import last from './utils/last'
 
 type Props = {
 	stats: DateStats[]

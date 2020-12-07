@@ -2,14 +2,14 @@ import { useState } from 'react'
 import { GitHub } from 'react-feather'
 import useSWR from 'swr'
 
-import Link from './components/Link'
+import { Category, DateStats, Region } from '../lib/formatData'
 import { DATA_SOURCE_URL, statsFetcher } from '../lib/statsFetcher'
 
 import styles from './Page.module.css'
 import Table from './Table'
-import { Category, DateStats, Region } from '../lib/formatData'
 import Button from './components/Button'
 import Graph from './components/Graph'
+import Link from './components/Link'
 import { checkIfGrowing } from './utils/checkIfGrowing'
 
 type Props = {
