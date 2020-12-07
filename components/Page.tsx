@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { GitHub } from 'react-feather'
 import useSWR from 'swr'
 
 import Link from './components/Link'
@@ -35,7 +36,7 @@ export default function Page({ initialData }: Props) {
 	const currentRegion = data?.find(el => el.region === region)
 
 	return (
-		<div>
+		<div className={styles.page}>
 			{error ? (
 				<div className={styles.error}>
 					Ой, что-то случилось :( <details>{error}</details>
@@ -88,6 +89,13 @@ export default function Page({ initialData }: Props) {
 							</Button>
 						))}
 					</div>
+					<Link
+						className={styles.repoLink}
+						href="https://github.com/lynxtaa/covid-russia"
+						isExternal
+					>
+						<GitHub />
+					</Link>
 				</>
 			) : (
 				<div className={styles.loading}>
