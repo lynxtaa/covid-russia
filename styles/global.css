@@ -1,18 +1,14 @@
-@import '~normalize.css/normalize.css';
-
-html {
-	box-sizing: border-box;
-}
-*,
-*:before,
-*:after {
-	box-sizing: inherit;
-}
+@import '~modern-normalize/modern-normalize.css';
 
 @media (min-width: 576px) {
 	body {
 		font-size: 18px;
 	}
+}
+
+:root {
+	--bg: #282c35;
+	--textColor: rgba(255, 255, 255, 0.88);
 }
 
 html,
@@ -22,11 +18,6 @@ body,
 }
 
 body {
-	--bg: #282c35;
-	--textColor: rgba(255, 255, 255, 0.88);
-
-	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue',
-		Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
 	-webkit-font-smoothing: antialiased;
 
 	background-color: var(--bg);
