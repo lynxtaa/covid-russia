@@ -1,5 +1,6 @@
 .table {
 	display: flex;
+	align-items: center;
 	margin-bottom: 2.5rem;
 	justify-content: space-evenly;
 }
