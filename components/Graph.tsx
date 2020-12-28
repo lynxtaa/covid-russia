@@ -2,7 +2,7 @@ import { format as formatDate, parseISO } from 'date-fns'
 import { ru as ruLang } from 'date-fns/locale'
 import { Line } from 'react-chartjs-2'
 
-import { Region } from '../../lib/formatData'
+import { Region } from '../lib/formatData'
 
 type Props = {
 	className?: string

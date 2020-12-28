@@ -1,7 +1,7 @@
 @import '~modern-normalize/modern-normalize.css';
 
 @media (min-width: 576px) {
-	body {
+	html {
 		font-size: 18px;
 	}
 }

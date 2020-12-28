@@ -5,11 +5,12 @@ import useSWR from 'swr'
 import { Category, DateStats, Region } from '../lib/formatData'
 import { DATA_SOURCE_URL, statsFetcher } from '../lib/statsFetcher'
 
+import Button from './Button'
+import Graph from './Graph'
+import Icon from './Icon'
+import Link from './Link'
 import styles from './Page.module.css'
 import Table from './Table'
-import Button from './components/Button'
-import Graph from './components/Graph'
-import Link from './components/Link'
 import { checkIfGrowing } from './utils/checkIfGrowing'
 
 type Props = {
@@ -94,7 +95,7 @@ export default function Page({ initialData }: Props) {
 						href="https://github.com/lynxtaa/covid-russia"
 						isExternal
 					>
-						<GitHub />
+						<Icon icon={<GitHub />} size={1.5} />
 					</Link>
 				</>
 			) : (
