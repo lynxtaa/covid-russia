@@ -2,24 +2,24 @@ import { format as formatDate, isToday, isYesterday, parseISO } from 'date-fns'
 import { ru as ruLang } from 'date-fns/locale'
 
 import { Category, DateStats } from '../lib/formatData'
+import last from '../lib/last'
 
 import Counter from './Counter'
-import styles from './Table.module.css'
-import last from './utils/last'
+import styles from './Stats.module.css'
 
 type Props = {
 	stats: DateStats[]
 	selected: Category
 }
 
-export default function Table({ stats, selected }: Props) {
+export default function Stats({ stats, selected }: Props) {
 	const lastCaseDate = parseISO(last(stats).date)
 
 	const lastCases = last(stats)[selected]
 	const prevLastCases = stats[stats.length - 2][selected]
 
 	return (
-		<div className={styles.table}>
+		<div className={styles.stats}>
 			<div className={styles.counter}>
 				<div>Всего</div>
 				<div>

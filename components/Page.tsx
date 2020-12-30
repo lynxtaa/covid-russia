@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { GitHub } from 'react-feather'
 import useSWR from 'swr'
 
+import { checkIfGrowing } from '../lib/checkIfGrowing'
 import { Category, DateStats, Region } from '../lib/formatData'
 import { DATA_SOURCE_URL, statsFetcher } from '../lib/statsFetcher'
 
@@ -10,8 +11,7 @@ import Graph from './Graph'
 import Icon from './Icon'
 import Link from './Link'
 import styles from './Page.module.css'
-import Table from './Table'
-import { checkIfGrowing } from './utils/checkIfGrowing'
+import Stats from './Stats'
 
 type Props = {
 	initialData: {
@@ -55,7 +55,7 @@ export default function Page({ initialData }: Props) {
 							{checkIfGrowing(currentRegion.stats) ? 'растёт.' : <>не&#32;растёт.</>}
 						</Link>
 					</h1>
-					<Table stats={currentRegion.stats} selected={selected} />
+					<Stats stats={currentRegion.stats} selected={selected} />
 					<div className={styles.buttons}>
 						<Button
 							isActive={region === Region.Spb}
