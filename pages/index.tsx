@@ -1,30 +1,30 @@
 import { GetStaticProps } from 'next'
+import { QueryClient } from 'react-query'
+import { dehydrate, DehydratedState } from 'react-query/hydration'
 
 import App from '../components/App'
 import Page from '../components/Page'
-import { DateStats, Region } from '../lib/formatData'
-import { statsFetcher, DATA_SOURCE_URL } from '../lib/statsFetcher'
+import { statsFetcher } from '../lib/statsFetcher'
 
 type Props = {
-	initialData: {
-		region: Region
-		stats: DateStats[]
-	}[]
+	dehydratedState: DehydratedState
 }
 
-export default function Home({ initialData }: Props) {
+export default function Home() {
 	return (
 		<App>
-			<Page initialData={initialData} />
+			<Page />
 		</App>
 	)
 }
 
 export const getStaticProps: GetStaticProps<Props> = async () => {
-	const initialData = await statsFetcher(DATA_SOURCE_URL)
+	const queryClient = new QueryClient()
+
+	await queryClient.prefetchQuery('stats', statsFetcher)
 
 	return {
-		props: { initialData },
+		props: { dehydratedState: dehydrate(queryClient) },
 		revalidate: 6 * 60 * 60, // every 6 hours
 	}
 }

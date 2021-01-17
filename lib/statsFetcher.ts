@@ -5,10 +5,8 @@ import formatData, { DateStats, Region } from './formatData'
 export const DATA_SOURCE_URL =
 	'https://raw.githubusercontent.com/lynxtaa/covid-stats-russia/master/covid_stats.csv'
 
-export async function statsFetcher(
-	url: string,
-): Promise<{ region: Region; stats: DateStats[] }[]> {
-	const response = await fetch(url)
+export async function statsFetcher(): Promise<{ region: Region; stats: DateStats[] }[]> {
+	const response = await fetch(DATA_SOURCE_URL)
 
 	if (!response.ok) {
 		throw new Error(`Error loading stats: ${response.status}`)

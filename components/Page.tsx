@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import { GitHub } from 'react-feather'
-import useSWR from 'swr'
+import { useQuery } from 'react-query'
 
 import { checkIfGrowing } from '../lib/checkIfGrowing'
-import { Category, DateStats, Region } from '../lib/formatData'
-import { DATA_SOURCE_URL, statsFetcher } from '../lib/statsFetcher'
+import { Category, Region } from '../lib/formatData'
+import { statsFetcher } from '../lib/statsFetcher'
 
 import Button from './Button'
 import Graph from './Graph'
@@ -13,26 +13,13 @@ import Link from './Link'
 import styles from './Page.module.css'
 import Stats from './Stats'
 
-type Props = {
-	initialData: {
-		region: Region
-		stats: DateStats[]
-	}[]
-}
-
-export default function Page({ initialData }: Props) {
+export default function Page() {
 	const [region, setRegion] = useState<Region>(Region.Spb)
 	const [selected, setSelected] = useState<Category>(Category.Sick)
 
-	const { data, error } = useSWR<typeof initialData, Error>(
-		DATA_SOURCE_URL,
-		statsFetcher,
-		{
-			focusThrottleInterval: 30000,
-			initialData,
-			revalidateOnMount: true,
-		},
-	)
+	const { data, error } = useQuery('stats', statsFetcher, {
+		staleTime: 30 * 60 * 1000,
+	})
 
 	const currentRegion = data?.find(el => el.region === region)
 
@@ -40,7 +27,7 @@ export default function Page({ initialData }: Props) {
 		<div className={styles.page}>
 			{error ? (
 				<div className={styles.error}>
-					Ой, что-то случилось :( <details>{error}</details>
+					Ой, что-то случилось :( <details>{String(error)}</details>
 				</div>
 			) : currentRegion && data ? (
 				<>
