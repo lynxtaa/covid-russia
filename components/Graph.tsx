@@ -6,31 +6,31 @@ import { Region } from '../lib/formatData'
 
 type Props = {
 	className?: string
+	periodInDays: number
 	region: Region
 	stats: { date: string; count: number }[]
 }
 
-export default function Graph({ className, stats, region }: Props) {
+export default function Graph({ className, stats, region, periodInDays }: Props) {
 	return (
 		<div className={className}>
 			<Line
+				type="line"
 				options={{
-					legend: { display: false },
-					scales: {
-						yAxes: [
-							{
-								ticks: {
-									beginAtZero: true,
-									callback: (label, index, labels) =>
-										Number(label).toLocaleString('ru-RU'),
-								},
-							},
-						],
+					plugins: {
+						legend: { display: false },
 					},
+					scales: {
+						// https://www.chartjs.org/docs/latest/getting-started/v3-migration.html#scales
+						y: {
+							display: true,
+							beginAtZero: true,
+						},
+					} as any,
 				}}
 				data={{
 					labels: stats
-						.slice(-14)
+						.slice(-periodInDays)
 						.map(c => formatDate(parseISO(c.date), 'd MMM', { locale: ruLang })),
 					datasets: [
 						{
@@ -40,7 +40,7 @@ export default function Graph({ className, stats, region }: Props) {
 							fill: false,
 							data: stats
 								.map((c, i) => (i > 0 ? c.count - stats[i - 1].count : c.count))
-								.slice(-14),
+								.slice(-periodInDays),
 						},
 					],
 				}}

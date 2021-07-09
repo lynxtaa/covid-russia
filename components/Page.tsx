@@ -57,17 +57,20 @@ export default function Page() {
 					<Graph
 						className={styles.graph}
 						region={region}
+						periodInDays={14}
 						stats={currentRegion.stats.map(stat => ({
 							date: stat.date,
 							count: stat[selected],
 						}))}
 					/>
 					<div className={styles.buttons}>
-						{([
-							[Category.Sick, 'выявлено'],
-							[Category.Healed, 'излечилось'],
-							[Category.Died, 'умерло'],
-						] as const).map(([type, text]) => (
+						{(
+							[
+								[Category.Sick, 'выявлено'],
+								[Category.Healed, 'излечилось'],
+								[Category.Died, 'умерло'],
+							] as const
+						).map(([type, text]) => (
 							<Button
 								key={type}
 								isActive={selected === type}
@@ -80,6 +83,7 @@ export default function Page() {
 					<Link
 						className={styles.repoLink}
 						href="https://github.com/lynxtaa/covid-russia"
+						aria-label="Github Repository"
 						isExternal
 					>
 						<Icon icon={<GitHub />} size={1.5} />
