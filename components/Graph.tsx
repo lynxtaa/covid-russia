@@ -15,18 +15,16 @@ export default function Graph({ className, stats, region, periodInDays }: Props)
 	return (
 		<div className={className}>
 			<Line
-				type="line"
 				options={{
 					plugins: {
 						legend: { display: false },
 					},
 					scales: {
-						// https://www.chartjs.org/docs/latest/getting-started/v3-migration.html#scales
 						y: {
 							display: true,
 							beginAtZero: true,
 						},
-					} as any,
+					},
 				}}
 				data={{
 					labels: stats

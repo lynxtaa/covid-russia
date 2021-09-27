@@ -16,6 +16,7 @@ import Stats from './Stats'
 export default function Page() {
 	const [region, setRegion] = useState<Region>(Region.Spb)
 	const [selected, setSelected] = useState<Category>(Category.Sick)
+	const [period, setPeriod] = useState(14)
 
 	const { data, error } = useQuery('stats', statsFetcher, {
 		staleTime: 30 * 60 * 1000,
@@ -54,15 +55,6 @@ export default function Page() {
 							Россия
 						</Button>
 					</div>
-					<Graph
-						className={styles.graph}
-						region={region}
-						periodInDays={14}
-						stats={currentRegion.stats.map(stat => ({
-							date: stat.date,
-							count: stat[selected],
-						}))}
-					/>
 					<div className={styles.buttons}>
 						{(
 							[
@@ -75,6 +67,32 @@ export default function Page() {
 								key={type}
 								isActive={selected === type}
 								onClick={() => setSelected(type)}
+							>
+								{text}
+							</Button>
+						))}
+					</div>
+					<Graph
+						className={styles.graph}
+						region={region}
+						periodInDays={period}
+						stats={currentRegion.stats.map(stat => ({
+							date: stat.date,
+							count: stat[selected],
+						}))}
+					/>
+					<div className={styles.buttons}>
+						{(
+							[
+								[14, '2 недели'],
+								[60, '2 месяца'],
+								[365, 'год'],
+							] as const
+						).map(([days, text]) => (
+							<Button
+								key={days}
+								isActive={period === days}
+								onClick={() => setPeriod(days)}
 							>
 								{text}
 							</Button>
