@@ -16,6 +16,7 @@ export type DateStats = {
 export enum Region {
 	Ru = 'Россия',
 	Spb = 'Санкт-Петербург',
+	Msk = 'Москва',
 }
 
 export default function formatData({

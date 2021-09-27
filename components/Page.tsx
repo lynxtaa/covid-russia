@@ -45,15 +45,21 @@ export default function Page() {
 					</h1>
 					<Stats stats={currentRegion.stats} selected={selected} />
 					<div className={styles.buttons}>
-						<Button
-							isActive={region === Region.Spb}
-							onClick={() => setRegion(Region.Spb)}
-						>
-							Санкт-Петербург
-						</Button>
-						<Button isActive={region === Region.Ru} onClick={() => setRegion(Region.Ru)}>
-							Россия
-						</Button>
+						{(
+							[
+								[Region.Spb, 'Санкт-Петербург'],
+								[Region.Msk, 'Москва'],
+								[Region.Ru, 'Россия'],
+							] as const
+						).map(([city, text]) => (
+							<Button
+								key={city}
+								isActive={region === city}
+								onClick={() => setRegion(city)}
+							>
+								{text}
+							</Button>
+						))}
 					</div>
 					<div className={styles.buttons}>
 						{(
