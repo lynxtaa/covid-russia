@@ -1,8 +1,18 @@
+import {
+	Chart as ChartJS,
+	LineElement,
+	PointElement,
+	LinearScale,
+	CategoryScale,
+	Tooltip,
+} from 'chart.js'
 import { format as formatDate, parseISO } from 'date-fns'
 import { ru as ruLang } from 'date-fns/locale'
 import { Line } from 'react-chartjs-2'
 
 import { Region } from '../lib/formatData'
+
+ChartJS.register(LineElement, PointElement, LinearScale, CategoryScale, Tooltip)
 
 type Props = {
 	className?: string
