@@ -12,10 +12,10 @@ type Props = {
 }
 
 export default function Stats({ stats, selected }: Props) {
-	const lastCaseDate = parseISO(stats.at(-1)!.date)
+	const lastCaseDate = parseISO(stats[stats.length - 1]!.date)
 
-	const lastCases = stats.at(-1)![selected]
-	const prevLastCases = stats.at(-2)![selected]
+	const lastCases = stats[stats.length - 1]![selected]
+	const prevLastCases = stats[stats.length - 2]![selected]
 
 	return (
 		<div className={styles.stats}>
