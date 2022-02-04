@@ -1,6 +1,6 @@
 {
 	"extends": [
-		"react-app",
+		"next",
 		"plugin:@typescript-eslint/recommended",
 		"plugin:import/errors",
 		"plugin:import/warnings",
@@ -12,7 +12,8 @@
 			"warn",
 			{ "alphabetize": { "order": "asc" }, "newlines-between": "always" }
 		],
-		"import/newline-after-import": "warn"
+		"import/newline-after-import": "warn",
+		"@typescript-eslint/no-non-null-assertion": "off"
 	},
 	"overrides": [
 		{

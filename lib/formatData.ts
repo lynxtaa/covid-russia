@@ -27,7 +27,7 @@ export default function formatData({
 	region: Region
 }): DateStats[] {
 	const [headerRow, ...dateRows] = data
-	const regionColumnIndex = headerRow.findIndex(col => col === region)
+	const regionColumnIndex = headerRow!.findIndex(col => col === region)
 
 	if (regionColumnIndex === -1) {
 		throw new Error(`No data for ${region}`)
@@ -37,7 +37,7 @@ export default function formatData({
 		dateRows
 			.filter(dateRow => dateRow[1] === category)
 			.map(dateRow => ({
-				date: parseISO(dateRow[0]).toISOString(),
+				date: parseISO(dateRow[0]!).toISOString(),
 				numCases: Number(dateRow[regionColumnIndex]),
 			}))
 
@@ -50,7 +50,7 @@ export default function formatData({
 	return sick.map((stats, i) => ({
 		date: stats.date,
 		sick: stats.numCases,
-		healed: healed[i].numCases,
-		died: died[i].numCases,
+		healed: healed[i]!.numCases,
+		died: died[i]!.numCases,
 	}))
 }

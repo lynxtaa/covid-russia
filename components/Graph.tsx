@@ -37,7 +37,7 @@ export default function Graph({ className, stats, region, periodInDays }: Props)
 							borderColor: 'rgb(255, 99, 132)',
 							fill: false,
 							data: stats
-								.map((c, i) => (i > 0 ? c.count - stats[i - 1].count : c.count))
+								.map((c, i) => (i > 0 ? c.count - stats[i - 1]!.count : c.count))
 								.slice(-periodInDays),
 						},
 					],

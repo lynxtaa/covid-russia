@@ -16,7 +16,7 @@ export async function statsFetcher(): Promise<{ region: Region; stats: DateStats
 	const { data, errors } = parseCsv<string[]>(csv)
 
 	if (errors.length > 0) {
-		throw new Error(errors[0].message)
+		throw new Error(errors[0]!.message)
 	}
 
 	return Object.values(Region).map(region => ({
