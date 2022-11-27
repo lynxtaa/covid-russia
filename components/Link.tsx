@@ -8,7 +8,12 @@ type Props = {
 	href: string
 } & React.PropsWithoutRef<JSX.IntrinsicElements['a']>
 
-export default function Link({ isExternal, children, className, ...rest }: Props) {
+export default function Link({
+	isExternal = false,
+	children,
+	className,
+	...rest
+}: Props) {
 	const externalProps = isExternal
 		? { target: '_blank', rel: 'noopener noreferrer' }
 		: undefined

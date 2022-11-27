@@ -26,7 +26,7 @@ export default function Page() {
 
 	return (
 		<div className={styles.page}>
-			{error ? (
+			{error !== undefined && error !== null ? (
 				<div className={styles.error}>
 					Ой, что-то случилось :( <details>{String(error)}</details>
 				</div>

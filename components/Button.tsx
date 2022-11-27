@@ -8,7 +8,7 @@ type Props = {
 	onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void
 }
 
-export default function Button({ children, isActive, onClick }: Props) {
+export default function Button({ children, isActive = false, onClick }: Props) {
 	return (
 		<button
 			type="button"

@@ -27,7 +27,7 @@ export default function formatData({
 	region: Region
 }): DateStats[] {
 	const [headerRow, ...dateRows] = data
-	const regionColumnIndex = headerRow!.findIndex(col => col === region)
+	const regionColumnIndex = headerRow!.indexOf(region)
 
 	if (regionColumnIndex === -1) {
 		throw new Error(`No data for ${region}`)
